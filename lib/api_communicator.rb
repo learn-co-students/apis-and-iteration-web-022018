@@ -25,13 +25,6 @@ def get_character_movies_from_api(character)
   char_film_urls.map do |film_url|
     get_api(film_url)
   end
-
-
-
-
-
-
-
   # iterate over the character hash to find the collection of `films` for the given
   #   `character`
   # collect those film API urls, make a web request to each URL to get the info
@@ -45,8 +38,8 @@ end
 
 def parse_character_movies(films_hash)
   # some iteration magic and puts out the movies in a nice list
-  films_hash.each do |film|
-    puts film['title']
+  films_hash.each.with_index(1) do |film, index|
+    puts "#{index} " + film['title']
   end
 
 end
