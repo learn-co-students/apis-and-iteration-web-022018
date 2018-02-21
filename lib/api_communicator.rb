@@ -52,7 +52,7 @@ def return_list()
   end
 end
 
-def run()
+def run
   loop do
     character = get_character_from_user
     if character == 'list'
