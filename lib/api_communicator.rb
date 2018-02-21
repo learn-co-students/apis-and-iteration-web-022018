@@ -2,8 +2,8 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
-def get_characters()
-  all_characters = RestClient.get('http://www.swapi.co/api/people/')
+def get_characters(url)
+  all_characters = RestClient.get(url)
   JSON.parse(all_characters)
 end
 
@@ -14,10 +14,14 @@ def get_films(character_hash)
 end
 
 def get_character_movies_from_api(character)
-  get_characters["results"].each do |character_hash|
-    if character_hash["name"].downcase == character
-      return get_films(character_hash)
+  characters_page = get_characters("http://www.swapi.co/api/people/")
+  while characters_page
+    characters_page["results"].each do |character_hash|
+      if character_hash["name"].downcase == character
+        return get_films(character_hash)
+      end
     end
+    characters_page["next"] ? characters_page = get_characters(characters_page["next"]) : characters_page = nil
   end
 end
 
@@ -40,27 +44,32 @@ def show_character_movies(character)
   parse_character_movies(films_hash)
 end
 
-def list()
-  get_characters["results"].each do |character_hash|
-    puts character_hash["name"]
+def return_list
+  characters_page = get_characters("http://www.swapi.co/api/people/")
+  x = []
+  while characters_page
+    y = characters_page["results"].collect do |character_hash|
+      character_hash["name"].downcase
+    end
+    x << y
+    characters_page["next"] ? characters_page = get_characters(characters_page["next"]) : characters_page = nil
   end
+  x.flatten
 end
 
-def return_list()
-  get_characters["results"].collect do |character_hash|
-    character_hash["name"].downcase
-  end
+def list
+  puts return_list
 end
 
-def run
+def run()
   loop do
     character = get_character_from_user
     if character == 'list'
-      list()
+      list
     elsif character == 'exit'
       puts "Goodbye!"
       break
-    elsif (return_list().include? character)
+    elsif (return_list.include? character)
       show_character_movies(character)
     else
       puts "Invalid Character!"
