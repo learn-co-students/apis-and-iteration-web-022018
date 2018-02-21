@@ -71,6 +71,7 @@ def get_character_movies_from_api(character)
     # character_hash = JSON.parse(all_characters)
   end #movie_urls.each
   # puts "*****#{movie_urls_info}"
+  puts "Character #{character} not found" if character_found == false
   movie_urls_info
   # return value of this method should be collection of info about each film.
   #  i.e. an array of hashes in which each hash reps a given film
