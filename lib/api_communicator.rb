@@ -2,17 +2,21 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
-def get_characters
-  all_characters = RestClient.get('http://www.swapi.co/api/people/')
+def get_characters(url)
+  all_characters = RestClient.get(url)
   character_hash = JSON.parse(all_characters)
 end
 
 def get_character_info(character)
-  character_hash = get_characters
-  character_hash['results'].each do |character_hash|
-    if character_hash['name'].downcase == character
-      return get_films(character_hash)
+  character_hash = get_characters('http://www.swapi.co/api/people/')
+
+  while character_hash
+    character_hash['results'].each do |character_hash|
+      if character_hash['name'].downcase == character
+        return get_films(character_hash)
+      end
     end
+    character_hash['next'] ? character_hash = get_characters(character_hash['next']) : character_hash = nil
   end
 end
 
@@ -57,24 +61,30 @@ def show_character_movies(character)
 end
 
 def run
-  input = ""
-
-  while input != 'exit' do
-    input = get_character_from_user
-    if input == 'list'
-      print_characters
-      puts ""
-    elsif list_characters.include?(input)
-      show_character_movies(input)
-    elsif input != 'exit'
-      puts "Invalid input."
-    end
+  # input = ""
+  #
+  # while input != 'exit' do
+  #   input = get_character_from_user
+  #   if input == 'list'
+  #     print_characters
+  #     puts ""
+  #   elsif list_characters.include?(input)
+  #     show_character_movies(input)
+  #   elsif input != 'exit'
+  #     puts "Invalid input."
+  #   end
+  # end
+  loop do
+    character = get_character_from_user
+    list if character == 'list'
+    break if character == 'exit'
+    return_value = show_character_movies(character)
   end
 end
 
 ## BONUS
 
-#parse_character_movies(get_character_movies_from_api('Luke Skywalker'))
+parse_character_movies(get_character_info('han solo'))
 
 # that `get_character_movies_from_api` method is probably pretty long. Does it do more than one job?
 # can you split it up into helper methods?
