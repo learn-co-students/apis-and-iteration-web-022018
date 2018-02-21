@@ -44,7 +44,7 @@ def show_character_movies(character)
   parse_character_movies(films_hash)
 end
 
-def return_list
+def characters_list
   characters_page = get_characters("http://www.swapi.co/api/people/")
   x = []
   while characters_page
@@ -57,22 +57,17 @@ def return_list
   x.flatten
 end
 
-def list
-  puts return_list
-end
-
 def run()
+  characters = characters_list
+  welcome
   loop do
     character = get_character_from_user
-    if character == 'list'
-      list
-    elsif character == 'exit'
-      puts "Goodbye!"
-      break
-    elsif (return_list.include? character)
+    puts characters if character == 'list'
+    break if character == 'exit'
+    if characters.include?(character)
       show_character_movies(character)
     else
-      puts "Invalid Character!"
+      puts "Not a valid character!"
     end
   end
 end
