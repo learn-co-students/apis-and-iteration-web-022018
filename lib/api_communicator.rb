@@ -9,9 +9,6 @@ def get_character_movies_from_api(character)
   character_hash['results'].each do |x|
     if x['name'] == character
       films_hash = character_hash['results'][0]['films']
-    else
-      puts "Enter a valid Star Wars character. "
-      exit
     end
   end
 end
