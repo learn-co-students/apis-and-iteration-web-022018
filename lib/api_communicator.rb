@@ -2,6 +2,16 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
+def capitalize_character(character)
+  # puts "#{character}"
+  # char_lowercase =  character.downcase
+
+  char_array=  character.split(" ")
+  capitalized = []
+  char_array.each {|word| capitalized << word.capitalize }#capitalize.join(" ")
+  # puts "#{capitalized.join(" ")}"
+  capitalized.join(" ")
+end
 
 def get_character_movies_from_api(character)
   #make the web request
@@ -16,7 +26,7 @@ def get_character_movies_from_api(character)
   hit_api = true
   # count = 0
   page=0
-
+  character=capitalize_character(character)
   while hit_api do
     page +=1
     url = 'http://www.swapi.co/api/people/?page='+page.to_s
