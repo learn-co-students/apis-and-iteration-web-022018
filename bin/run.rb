@@ -6,10 +6,10 @@ require_relative "../lib/command_line_interface.rb"
 welcome
 char_array = character_array
 mov_array = movie_array
-puts character_array
 loop do
   puts "Please enter a command."
-  input = gets.chomp
+  puts "'Character,' 'Movie,' or 'Exit'"
+  input = gets.chomp.downcase
   case input
   when "character"
     puts "*" * 25

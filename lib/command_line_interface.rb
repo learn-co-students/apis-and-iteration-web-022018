@@ -2,7 +2,7 @@ require "pry"
 def welcome
   # puts out a welcome message here!
   puts "Hello padawan, welcome to the grand library of Star Wars wisdom!"
-  puts "Please enter 'character' or 'movie'"
+  puts "Please wait while I load my knowledge..."
 end
 
 def get_movie_from_user

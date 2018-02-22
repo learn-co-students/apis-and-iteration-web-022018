@@ -34,9 +34,12 @@ end
 def get_characters_from_movie(movie, array)
   output = []
   array.each do |film_data|
-    if film_data["title"].downcase == movie
+    if film_data["title"].downcase.include? movie
       output = film_data["characters"]
     end
+  end
+  if output == []
+    puts "Could not find your query."
   end
   output.collect do |character_page|
     character = JSON.parse(RestClient.get(character_page))
@@ -59,9 +62,13 @@ def get_character_movies_from_api(character, array)
   #  and that method will do some nice presentation stuff: puts out a list
   #  of movies by title. play around with puts out other info about a given film.
   array.each do |character_data|
-    if character_data["name"].downcase == character
+    if character_data["name"].downcase.include? character
       output = character_data["films"]
     end
+  end
+  if output == []
+    puts "Could not find your query. Make sure you are including hyphens"
+    puts "ie. 'Obi-Wan Kenobi'"
   end
   output.collect do |link|
     JSON.parse(RestClient.get(link))
