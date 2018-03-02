@@ -2,32 +2,41 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
-def get_character_movies_from_api(character)
+
+# a hash of character name => { character info }
+def fetch_characters
   #make the web request
-  all_characters = RestClient.get('http://www.swapi.co/api/people/')
-  character_hash = JSON.parse(all_characters)
-  
-  # iterate over the character hash to find the collection of `films` for the given
-  #   `character`
-  # collect those film API urls, make a web request to each URL to get the info
-  #  for that film
-  # return value of this method should be collection of info about each film.
-  #  i.e. an array of hashes in which each hash reps a given film
-  # this collection will be the argument given to `parse_character_movies`
-  #  and that method will do some nice presentation stuff: puts out a list
-  #  of movies by title. play around with puts out other info about a given film.
+  result = fetch_and_parse('http://www.swapi.co/api/people/')
+  result['results']
 end
 
-def parse_character_movies(films_hash)
-  # some iteration magic and puts out the movies in a nice list
+def fetch_and_parse(url)
+  JSON.parse(RestClient.get(url))
 end
 
-def show_character_movies(character)
-  films_hash = get_character_movies_from_api(character)
-  parse_character_movies(films_hash)
+def get_film_info(url)
+  fetch_and_parse(url)
 end
 
-## BONUS
+def character_info(character_name)
+  fetch_characters.find { |c| c['name'].include?(character_name) }
+end
 
-# that `get_character_movies_from_api` method is probably pretty long. Does it do more than one job?
-# can you split it up into helper methods?
+def movies_hashes_for(character_name)
+  c_info = character_info(character_name)
+  film_info_array = c_info['films'].map do |url|
+    get_film_info(url)
+  end
+end
+
+def print_movies(film_info_array)
+  # some iteration magic to puts out the movies in a nice list
+  film_info_array.sort_by { |film| film['episode_id'] }.each do |film_hash|
+    puts "Episode #{film_hash['episode_id']}: #{film_hash['title']}"
+  end
+end
+
+def show_character_movies(character_name)
+  movie_hashes = movies_hashes_for(character_name)
+  print_movies(movie_hashes)
+end
