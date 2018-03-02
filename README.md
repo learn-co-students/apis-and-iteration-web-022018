@@ -467,7 +467,7 @@ This file is pretty basic. Define a `welcome` method that `puts` out a friendly 
 
 ## Bonus
 
-Once you have your program working as expected, challenge yourself. Can you add more methods so that a user can make additional queries to the API? Maybe a user should be able to input a movie name and get some movie info in return?
+Once you have your program working as expected, challenge your Can you add more methods so that a user can make additional queries to the API? Maybe a user should be able to input a movie name and get some movie info in return?
 
 You can also put your refactoring skills to work. Take a closer look at the `get_character_movies_from_api` method. Does it look kind of long to you? Can you split it up into one or two helper methods?
 
